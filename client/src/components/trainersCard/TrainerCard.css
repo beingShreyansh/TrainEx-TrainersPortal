@@ -1,0 +1,55 @@
+.trainer-card {
+  background-color: #938c7f; /* Secondary color for trainer card */
+  color: #69696d; /* Light text color for better contrast */
+  border-radius: 10px;
+  overflow: hidden;
+  width: 220px;
+  margin: 10px;
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.trainer-card:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.trainer-image {
+  height: 75px;
+  padding: 5px;
+  object-fit: cover;
+  border-bottom: 2px solid #e7e7e7;
+  border-radius: 10px 10px 0 0;
+}
+
+.trainer-details {
+  padding: 15px;
+}
+
+.trainer-name {
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: 600;
+}
+
+.trainer-skills {
+  margin: 10px 0;
+  font-size: 1em;
+  font-weight: 500;
+  color: #e7e7e7; /* Tertiary color for trainer skills */
+}
+
+/* Media Queries for responsiveness */
+@media only screen and (max-width: 768px) {
+  .trainer-card {
+    width: 100%; /* Make the card full-width on smaller screens */
+  }
+
+  .trainer-name {
+    font-size: 1.2em; /* Adjust font size for smaller screens */
+  }
+
+  .trainer-skills {
+    font-size: 0.9em; /* Adjust font size for smaller screens */
+  }
+}

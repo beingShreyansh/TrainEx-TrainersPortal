@@ -1,37 +1,45 @@
-// src/App.js
-import React from 'react';
-import './App.css';
+import React from "react";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+
+import { Home, Login, NoPage, Register } from "./pages";
+import Layout from "./pages/Layout";
 
 function App() {
-  const trainers = [
-    { id: 1, name: 'John Doe', skills: ['Fitness', 'Nutrition'], location: 'New York' },
-    { id: 2, name: 'Jane Smith', skills: ['Yoga', 'Meditation'], location: 'Los Angeles' },
-    // Add more trainers as needed
-  ];
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout Children = {Home} />,
+      errorElement: <NoPage />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
+    },
+  ]);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Trainers Portal</h1>
-      </header>
-      <main>
-        <section className="trainers-section">
-          <h2>Featured Trainers</h2>
-          <div className="trainer-list">
-            {trainers.map((trainer) => (
-              <div key={trainer.id} className="trainer-card">
-                <h3>{trainer.name}</h3>
-                <p>{trainer.skills.join(', ')}</p>
-                <p>{trainer.location}</p>
-                <button>Contact</button>
-              </div>
-            ))}
-          </div>
-        </section>
-      </main>
-      <footer>
-        <p>&copy; 2024 Trainers Portal</p>
-      </footer>
+    <div>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          success: {
+            theme: {
+              primary: "#4aed88",
+            },
+          },
+          error: {
+            theme: {
+              primary: "red",
+            },
+          },
+        }}
+      />
+      <RouterProvider router={router} />
     </div>
   );
 }

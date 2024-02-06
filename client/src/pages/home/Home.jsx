@@ -4,56 +4,64 @@ import { useNavigate } from "react-router-dom";
 
 import TrainerCard from "../../components/trainersCard/TrainerCard";
 import "./Home.css";
+import useDebounce from "../../hooks/useDebounce";
 
 const pageLimit = 5;
 const HomePage = () => {
   const navigate = useNavigate();
   const [trainers, setTrainers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedValue = useDebounce(searchTerm, 1000);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/home/getTrainers`,
-          {
-            pagination: {
-              pageLimit,
-              pageNumber: 1,
-            },
-          }
-        );
-        setTrainers(response.data.trainer);
+        if (!searchTerm) {
+          const response = await axios.post(
+            `${import.meta.env.VITE_API_URL}/home/getTrainers`,
+            {
+              pagination: {
+                pageLimit,
+                pageNumber: 1,
+              },
+              filters: {},
+            }
+          );
+          setTrainers(response.data.trainers);
+        } else {
+          const response = await axios.post(
+            `${import.meta.env.VITE_API_URL}/home/getTrainers`,
+            {
+              pagination: {
+                pageLimit,
+                pageNumber: 1,
+              },
+              filters: {
+                skills: debouncedValue,
+              },
+            }
+          );
+          setTrainers(response.data.trainers);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Display an error message to the user
       }
     };
 
     fetchData();
-  }, []);
-
-  const handleSearch = async () => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/home/searchTrainers`,
-        {
-          searchTerm,
-        }
-      );
-      setTrainers(response.data.trainer);
-    } catch (error) {
-      console.error("Error searching trainers:", error);
-      // Display an error message to the user
-    }
-  };
+  }, [debouncedValue]);
 
   return (
     <div className="homepage-container">
       <div className="welcome-section">
         <h1>Welcome to the Trainer's Portal</h1>
         <p>Your one-stop destination for finding professional trainers.</p>
-        <button className="explore-link" onClick={() => navigate('/explore-trainers')}>Explore Trainers</button>
+        <button
+          className="explore-link"
+          onClick={() => navigate("/explore-trainers")}
+        >
+          Explore Trainers
+        </button>
       </div>
 
       <div className="featured-trainers-section">
@@ -77,7 +85,6 @@ const HomePage = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button onClick={handleSearch} className="search-button">Search</button>
       </div>
     </div>
   );

@@ -1,0 +1,54 @@
+.explore-trainers {
+    margin-top: 50px;
+    padding: 20px;
+}
+
+.trainer-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #69696d;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-row {
+    display: flex;
+    border-bottom: 1px solid #69696d;
+}
+
+.table-row.header {
+    background-color: #beaf91;
+    color: white;
+}
+
+.table-cell {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    overflow: hidden; /* Prevents overflow issues */
+}
+
+.table-cell:first-child {
+    flex: 0.3; /* Adjust the width for the image column */
+}
+
+.table-cell img {
+    width: 80px;
+    height: auto;
+    border-bottom: 2px solid #e7e7e7;
+    border-radius: 8px 0 0 8px;
+}
+
+/* Responsive adjustments */
+@media only screen and (max-width: 768px) {
+    .table-cell {
+        padding: 5px; /* Adjusted padding for smaller screens */
+        font-size: 0.8em; /* Adjusted font size for smaller screens */
+    }
+
+    .table-cell img {
+        width: 60px; /* Adjusted image width for smaller screens */
+    }
+}

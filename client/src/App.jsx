@@ -2,7 +2,7 @@ import React from "react";
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import { Home, Login, NoPage, Register } from "./pages";
+import { Home, Login, NoPage, Register,ExploreTrainer} from "./pages";
 import Layout from "./pages/Layout";
 
 function App() {
@@ -19,6 +19,10 @@ function App() {
     {
       path: "/register",
       element: <Register />,
+    },
+    {
+      path: "/explore-trainers",
+      element: <Layout Children={ExploreTrainer} />,
     },
   ]);
 

@@ -3,6 +3,7 @@ require("dotenv").config();
 const cors = require("cors");
 
 const connectDB = require("./dbConfig");
+const { adminRouter, homeRouter } = require("./routes");
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
+
+app.use('/admin', adminRouter);
+app.use('/home', homeRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is connected at ${PORT}`);

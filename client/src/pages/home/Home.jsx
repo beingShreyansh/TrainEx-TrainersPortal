@@ -1,45 +1,40 @@
 // HomePage.jsx
 
-import React from "react";
-import "./Home.css";
-import TrainerCard from "../../components/trainersCard/TrainerCard";
-import Navbar from "../../components/navbar/Navbar";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
+import TrainerCard from "../../components/trainersCard/TrainerCard";
+import "./Home.css";
+import { useNavigate } from "react-router-dom";
+
+const pageLimit= 5
 const HomePage = () => {
-  const trainers = [
-    {
-      image:
-        "https://static.vecteezy.com/system/resources/previews/019/879/186/original/user-icon-on-transparent-background-free-png.png",
-      name: "John Doe",
-      skills: ["JavaScript", "React", "Node.js"],
-    },
-    {
-      image:
-        "https://static.vecteezy.com/system/resources/previews/019/879/186/original/user-icon-on-transparent-background-free-png.png",
-      name: "Jane Smith",
-      skills: ["Java", "Spring Boot", "Database Management"],
-    },
-    {
-      image:
-        "https://static.vecteezy.com/system/resources/previews/019/879/186/original/user-icon-on-transparent-background-free-png.png",
-      name: "Mark Johnson",
-      skills: ["Python", "Django", "Data Science"],
-    },
-    {
-      image:
-        "https://static.vecteezy.com/system/resources/previews/019/879/186/original/user-icon-on-transparent-background-free-png.png",
-      name: "Sarah Williams",
-      skills: ["HTML", "CSS", "UI/UX Design"],
-    },
-    {
-      image:
-        "https://static.vecteezy.com/system/resources/previews/019/879/186/original/user-icon-on-transparent-background-free-png.png",
-      name: "Alex Turner",
-      skills: ["PHP", "MySQL", "Web Security"],
-    },
-  ];
+  const navigate = useNavigate();
+
+  const [trainers, setTrainers] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/home/getTrainers`,
+          {
+            pagination: {
+              pageLimit,
+              pageNumber: 1,
+            },
+          }
+        );
+        setTrainers(response.data.trainer)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleSearch = () => {
-    // Implement your search logic here
     console.log("Search button clicked");
   };
   return (
@@ -48,7 +43,7 @@ const HomePage = () => {
         <div className="welcome-section">
           <h1>Welcome to the Trainer's Portal</h1>
           <p>Your one-stop destination for finding professional trainers.</p>
-          <button className="explore-link">Explore Trainers</button>
+          <button className="explore-link" onClick={()=>navigate('/explore-trainers')}>Explore Trainers</button>
         </div>
 
         <div className="featured-trainers-section">
@@ -57,7 +52,7 @@ const HomePage = () => {
             {trainers.map((trainer, index) => (
               <TrainerCard
                 key={index}
-                image={trainer.image}
+                image={trainer.imageUrl}
                 name={trainer.name}
                 skills={trainer.skills}
               />
@@ -67,7 +62,9 @@ const HomePage = () => {
 
         <div className="search-bar-section">
           <input type="text" placeholder="Search trainers by skill..." />
-          <button onClick={handleSearch} className="search-button">Search</button>
+          <button onClick={handleSearch} className="search-button">
+            Search
+          </button>
         </div>
       </div>
     </>

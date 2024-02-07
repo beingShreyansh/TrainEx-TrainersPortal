@@ -1,51 +1,62 @@
 import React, { useEffect, useState } from "react";
 import "./ExploreTrainers.css";
 import axios from "axios";
+import SortableHeaderCell from "./SortableHeaderCell";
 import useDebounce from "../../hooks/useDebounce";
 
-const pageLimit=10;
+const pageLimit = 5;
 const ExploreTrainers = () => {
   const [trainers, setTrainers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [sort, setSort] = useState({ field: null, order: "asc" });
+  const [pageNumber, setPageNumber] = useState(1);
   const debouncedValue = useDebounce(searchTerm, 1000);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!searchTerm) {
-          const response = await axios.post(
-            `${import.meta.env.VITE_API_URL}/home/getTrainers`,
-            {
-              pagination: {
-                pageLimit,
-                pageNumber: 1,
-              },
-              filters: {},
-            }
-          );
-          setTrainers(response.data.trainers);
-        } else {
-          const response = await axios.post(
-            `${import.meta.env.VITE_API_URL}/home/getTrainers`,
-            {
-              pagination: {
-                pageLimit,
-                pageNumber: 1,
-              },
-              filters: {
-                skills: debouncedValue,
-              },
-            }
-          );
-          setTrainers(response.data.trainers);
-        }
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/home/getTrainers`,
+          {
+            pagination: {
+              pageLimit,
+              pageNumber,
+            },
+            filters: {
+              skills: debouncedValue,
+            },
+          }
+        );
+        setTrainers(response.data.trainers);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [debouncedValue]);
+  }, [debouncedValue, pageNumber]);
+
+  // Function to handle sorting locally
+  const handleSort = (field) => {
+    const sortedTrainers = [...trainers].sort((a, b) => {
+      if (sort.order === "asc") {
+        return a[field] < b[field] ? -1 : 1;
+      } else {
+        return a[field] > b[field] ? -1 : 1;
+      }
+    });
+
+    setTrainers(sortedTrainers);
+    setSort({ field, order: sort.order === "asc" ? "desc" : "asc" });
+  };
+
+  const goToPage = (pageNumber) => {
+    setPageNumber(pageNumber);
+  };
+
+  const startIndex = (pageNumber - 1) * pageLimit;
+  const endIndex = startIndex + pageLimit;
+  const displayedTrainers = trainers.slice(startIndex, endIndex);
 
   return (
     <div className="explore-trainers">
@@ -61,11 +72,27 @@ const ExploreTrainers = () => {
       <div className="trainer-table">
         <div className="table-row header">
           <div className="table-cell">Serial No.</div>
-          <div className="table-cell">Name</div>
+          <div className="table-cell">
+            Name
+            <SortableHeaderCell
+              field="name"
+              currentSort={sort}
+              handleSort={handleSort}
+            />
+          </div>
+
           <div className="table-cell">Skills</div>
-          <div className="table-cell">Fees</div>
+
+          <div className="table-cell">
+            Fees
+            <SortableHeaderCell
+              field="fees"
+              currentSort={sort}
+              handleSort={handleSort}
+            />
+          </div>
         </div>
-        {trainers.map((trainer, index) => (
+        {displayedTrainers.map((trainer, index) => (
           <div key={trainer.id} className="table-row">
             <div className="table-cell">{index + 1}</div>
             <div className="table-cell">
@@ -76,6 +103,16 @@ const ExploreTrainers = () => {
             <div className="table-cell">{trainer.fees}</div>
           </div>
         ))}
+      </div>
+      <div className="pagination">
+        <button
+          onClick={() => goToPage(pageNumber - 1)}
+          disabled={pageNumber === 1}
+        >
+          Previous
+        </button>
+        <span>Page {pageNumber}</span>
+        <button onClick={() => goToPage(pageNumber + 1)}>Next</button>
       </div>
     </div>
   );

@@ -16,16 +16,16 @@ export default function Navbar() {
 
           {/* Navigation links */}
           <div id="navLinks" className={`${menuOpen ? 'open' : ''}`}>
-            <NavLink to="#home" className="navlink">
+            <NavLink to="/#home" className="navlink">
               Home
             </NavLink>
-            <NavLink to="#services" className="navlink">
-              Services
+            <NavLink to="/explore-trainers" className="navlink">
+              Explore Trainers
             </NavLink>
-            <NavLink to="#about" className="navlink">
+            <NavLink to="/about" className="navlink">
               About
             </NavLink>
-            <NavLink to="#contact" className="navlink">
+            <NavLink to="/contact" className="navlink">
               Contact
             </NavLink>
           </div>

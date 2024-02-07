@@ -3,8 +3,10 @@
   top: 0;
   height: 60px;
   line-height: 60px;
-  width: 100vw;
+  width: 90vw;
+  margin: auto;
   z-index: 10;
+  border-bottom: 1px solid #69696d;
 }
 
 .nav-wrapper {
@@ -29,10 +31,9 @@
   float: left;
   margin-left: 28px;
   height: 30px;
-
   letter-spacing: 1px;
-
   color: #69696d; /* Secondary color for text */
+  margin: auto;
 }
 
 @media (max-width: 768px) {
@@ -124,6 +125,7 @@
 
 /* ... existing styles ... */
 @media (max-width: 768px) {
+ 
   #admin-navbar #navLinks {
     display: none;
   }
@@ -169,4 +171,5 @@
       90deg
     ); /* Added rotation for the hamburger icon when the menu is open */
   }
+
 }

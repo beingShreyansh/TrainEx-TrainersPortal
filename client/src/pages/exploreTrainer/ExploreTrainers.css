@@ -1,5 +1,4 @@
 .explore-trainers {
-    margin-top: 50px;
     padding: 20px;
 }
 
@@ -39,6 +38,9 @@
     height: auto;
     border-bottom: 2px solid #e7e7e7;
     border-radius: 8px 0 0 8px;
+}
+.sort-filter-cell>span{
+    cursor: pointer;
 }
 
 /* Responsive adjustments */

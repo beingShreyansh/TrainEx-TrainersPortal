@@ -16,8 +16,9 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        let response;
         if (!searchTerm) {
-          const response = await axios.post(
+          response = await axios.post(
             `${import.meta.env.VITE_API_URL}/home/getTrainers`,
             {
               pagination: {
@@ -27,9 +28,8 @@ const HomePage = () => {
               filters: {},
             }
           );
-          setTrainers(response.data.trainers);
         } else {
-          const response = await axios.post(
+          response = await axios.post(
             `${import.meta.env.VITE_API_URL}/home/getTrainers`,
             {
               pagination: {
@@ -41,8 +41,8 @@ const HomePage = () => {
               },
             }
           );
-          setTrainers(response.data.trainers);
         }
+        setTrainers(response.data.trainers);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -67,7 +67,7 @@ const HomePage = () => {
       <div className="featured-trainers-section">
         <h2>Featured Trainers</h2>
         <div className="featured-trainers-list">
-          {trainers.map((trainer, index) => (
+          {trainers.slice(0, pageLimit).map((trainer, index) => (
             <TrainerCard
               key={index}
               image={trainer.imageUrl}
